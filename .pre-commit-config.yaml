@@ -12,14 +12,14 @@ repos:
     -   id: check-symlinks # Check for symlinks which would be broken in checkout
 
 -   repo: https://github.com/psf/black
-    rev: 25.9.0
+    rev: 26.5.1
     hooks:
     -   id: black
         name: black
         types: [python]
 
 -   repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+    rev: 9.0.0a3
     hooks:
     -   id: isort
         name: isort

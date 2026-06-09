@@ -7,7 +7,7 @@ Automatically configures basic logging via `setup_logging()` on import.
 
 import logging
 
-from src.utils import get_env
+from src.template_python.utils import get_env
 
 _LOGGING_CONFIGURED = False
 
