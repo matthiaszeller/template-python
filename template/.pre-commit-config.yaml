@@ -1,0 +1,39 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    -   id: trailing-whitespace # Trailing whitespace checker
+    -   id: check-yaml # Check for YAML syntax errors
+    -   id: check-json # Check for JSON syntax errors
+    -   id: check-toml # Check for TOML syntax errors
+    -   id: debug-statements # Check for pdb / breakpoint() statements
+    -   id: end-of-file-fixer # Ensure files end in a newline
+    -   id: check-added-large-files # Prevent large files from being committed
+    -   id: check-merge-conflict # Check for files that contain merge conflict strings
+    -   id: check-symlinks # Check for symlinks which would be broken in checkout
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.10
+    hooks:
+    -   id: ruff-check # Linter and import sorting (print statements flagged by T20)
+        args: [--fix]
+    -   id: ruff-format # Formatter
+
+-   repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.12.11
+    hooks:
+    -   id: uv-lock # Keep uv.lock in sync with pyproject.toml
+
+-   repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+    -   id: gitleaks # Scan for committed secrets
+
+-   repo: local
+    hooks:
+    -   id: ty
+        name: ty
+        entry: uv run ty check
+        language: system
+        types: [python]
+        pass_filenames: false

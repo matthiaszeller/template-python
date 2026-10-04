@@ -1,0 +1,52 @@
+_subdirectory: template
+_min_copier_version: "9.4.0"
+
+_message_after_copy: |
+  Project "{{ project_name }}" created in {{ _copier_conf.dst_path }}.
+
+  Next steps:
+    cd {{ _copier_conf.dst_path }}
+    make check      # lint, type check and test
+
+# Run on copy only: `copier update` must not re-init git or reinstall hooks.
+_tasks:
+  - command: git init --initial-branch=main
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: uv sync
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: uv run pre-commit install
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: uv run pre-commit autoupdate --jobs 4
+    when: "{{ _copier_operation == 'copy' }}"
+
+project_name:
+  type: str
+  help: Project name (distribution name, e.g. my-project)
+  validator: >-
+    {% if not (project_name | regex_search('^[A-Za-z0-9][A-Za-z0-9._-]*$')) %}
+    Use letters, digits, dots, hyphens and underscores only.
+    {% endif %}
+
+package_name:
+  type: str
+  help: Import name of the Python package (also the folder in src/)
+  default: "{{ project_name | lower | replace('-', '_') | replace('.', '_') }}"
+  validator: >-
+    {% if not (package_name | regex_search('^[a-z_][a-z0-9_]*$')) %}
+    Must be a valid lowercase Python identifier (letters, digits, underscores).
+    {% endif %}
+
+description:
+  type: str
+  help: One-line project description
+  default: ""
+
+author_name:
+  type: str
+  help: Author name (used in pyproject.toml and LICENSE)
+  default: Matthias Zeller
+
+author_email:
+  type: str
+  help: Author email (used in pyproject.toml)
+  default: m.zeller1901@gmail.com

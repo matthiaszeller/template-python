@@ -1,0 +1,9 @@
+import logging
+
+from {{ package_name }}.__main__ import main
+
+
+def test_main_configures_logging_from_settings(monkeypatch):
+    monkeypatch.setenv("LOG_LEVEL", "DEBUG")
+    main()
+    assert logging.getLogger().level == logging.DEBUG

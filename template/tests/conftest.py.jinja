@@ -1,0 +1,17 @@
+import logging
+
+import pytest
+
+from {{ package_name }}.settings import get_settings
+
+
+@pytest.fixture(autouse=True)
+def _isolate_global_state():
+    """Keep tests independent of the settings cache and the root logger configuration."""
+    root = logging.getLogger()
+    handlers, level = root.handlers[:], root.level
+    get_settings.cache_clear()
+    yield
+    get_settings.cache_clear()
+    root.handlers[:] = handlers
+    root.setLevel(level)

@@ -1,0 +1,27 @@
+name: Test template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - name: Generate a project from the template
+        run: >
+          uvx copier copy --trust --defaults --vcs-ref=HEAD
+          --data project_name=demo-project
+          . "$RUNNER_TEMP/demo-project"
+      - name: Run the generated project's checks
+        working-directory: ${{ runner.temp }}/demo-project
+        run: |
+          git add -A
+          uv run pre-commit run --all-files --show-diff-on-failure
+          uv run pytest --cov

@@ -1,0 +1,27 @@
+# {{ project_name }}
+
+{{ description }}
+
+## Setup
+
+Requires [uv](https://docs.astral.sh/uv/).
+
+```bash
+uv sync
+uv run pre-commit install
+```
+
+## Development
+
+```bash
+make help   # list all commands
+make check  # lint, type check and test
+```
+
+- **Dependencies**: `uv add <pkg>` / `uv remove <pkg>`; `make upgrade` upgrades everything.
+  `uv.lock` is committed and CI installs with `--locked`.
+- **Python version**: `.python-version` is used locally; `requires-python` in `pyproject.toml` is the supported
+  floor, and CI tests 3.13 and 3.14.
+- **Configuration**: copy `.env.example` to `.env`. Settings are defined in `settings.py` (pydantic-settings);
+  environment variables take precedence over `.env`.
+- **Run**: `uv run python -m {{ package_name }}`

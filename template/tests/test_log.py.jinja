@@ -1,0 +1,19 @@
+import logging
+
+import pytest
+
+from {{ package_name }}.log import setup_logging
+
+
+@pytest.mark.parametrize(("level", "expected"), [("WARNING", logging.WARNING), (logging.DEBUG, 10)])
+def test_setup_logging_sets_root_level(level, expected):
+    setup_logging(level)
+    assert logging.getLogger().level == expected
+
+
+def test_setup_logging_can_be_called_again_to_change_level():
+    setup_logging("INFO")
+    setup_logging("ERROR")
+    root = logging.getLogger()
+    assert root.level == logging.ERROR
+    assert len(root.handlers) == 1

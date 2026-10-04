@@ -1,0 +1,17 @@
+# {{ project_name }}
+
+Package: `src/{{ package_name }}/`. Tests: `tests/`.
+
+## Commands
+
+- `make check` — lint, type check and test (run before finishing a task)
+- `make fmt` — auto-fix lint issues and format
+- `uv add <pkg>` / `uv add --group <group> <pkg>` — add dependencies (groups: `lint`, `test`, `dev`)
+
+## Conventions
+
+- Ruff (line length 110) for linting and formatting; `ty` for type checking.
+- No `print()`; use `logging.getLogger(__name__)`. Only entry points call `setup_logging()` (`log.py`).
+- Use relative imports inside the package (`from .settings import ...`).
+- Configuration lives in `settings.py` (pydantic-settings): add a field per env var and document it in
+  `.env.example`. Access it with `get_settings()`; don't read `os.environ` directly.
